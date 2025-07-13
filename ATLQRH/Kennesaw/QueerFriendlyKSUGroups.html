@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queer Resource Hub</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container">
+        <div class="section">
+            <h2>Queer Friendly Clubs</h2>
+            <p></p>
+            <ul>
+                <li><a href="https://linktr.ee/kpridealliance" target="_blank">
+                    KSU pride alliance
+                </a></li><p>KSU pride alliance is a predominantly K-Campus based organization who describes themselves as providing a support network for LGBTQ+ students of Kennesaw State University and to educate others surrounding the realities of LGBTQ+ experiences.</p>
+                <li><a href="https://discord.gg/RRsdXvX9XB" target="_blank">
+                    LGBTQ+ Resource Center RSO/Discord Server
+                </a></li>
+                <p>
+                    Link to the Discord Server trying to serve as the successor to the LGBTQ+ Center. They are also trying to become an RSO to restore some of the resources lost.
+                </p>
+                <li><a href="https://discord.gg/dMD2dPcg38" target="_blank">
+                    KSU Creative Club
+                </a></li><p>KSU Creative Club is a space for creative individuals and people who like to make fun projects with friends</p>
+                <li><a href="https://discord.gg/yeFbRCYU88" target="_blank">
+                    Board Game Club
+                </a></li>
+                <p>
+                    KSU Board Game Club is queer run organization that meets every friday at 5 on Marietta campus. Good place to make friends.
+                </p>
+                <li><a href="https://discord.gg/pZWDSnf3cg" target="_blank">
+                    oSTEM
+                </a></li>
+                <p>
+                    oSTEM is a professional organization aimed at celebrating  LGBTQ+ individuals in STEM
+                </p>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Queer Friendly Groups</h2>
+            <p></p>
+            <ul>
+                <li><a href="https://discord.gg/zPcmNrKaTS" target="_blank">
+                    Queer Workout Groups
+                </a></li><p>Ever wanted to get into working out but gender norms kept you from it? This group can help, it's primarily Kennesaw based but Marietta students are in it as well.</p>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="footer"></div> 
+
+<script>
+    async function loadFragment(id, file) { 
+      const res = await fetch(file);
+      const html = await res.text();
+      document.getElementById(id).innerHTML = html;
+    }
+
+    loadFragment("header", "/fragments/header-Kennesaw.html"); 
+    loadFragment("footer", "/fragments/footer.html");
+</script>
+</body>

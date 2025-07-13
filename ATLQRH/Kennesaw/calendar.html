@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queer Resource Hub</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .calendar {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+
+        .calendar-header, .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .calendar-header div {
+            font-weight: bold;
+            color: #ff6666;
+            padding: 5px 0;
+        }
+
+        .calendar-days div {
+            background-color: #333;
+            padding: 10px 0;
+            border-radius: 4px;
+            font-size: 0.9em;
+            box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .calendar-days .event {
+            background-color: #d90000;
+            color: #fff;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .calendar-days .empty {
+            background: none;
+            box-shadow: none;
+        }
+
+        .event-details {
+            background-color: #1a1a1a;
+            border-left: 5px solid #d90000;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+        }
+
+        .event-details h3 {
+            margin-top: 0;
+            color: #d90000;
+        }
+
+        .event-details ul {
+            list-style: disc;
+            padding-left: 20px;
+            color: #eee;
+        }
+        .event {
+            position: relative;
+        }
+
+        .event-stars {
+            position: absolute;
+            top: -10px;
+            left: 0%;
+            font-size: 0.7em;
+            color: white;
+            background-color: #d90000;
+            pointer-events: none;
+            white-space: nowrap;
+            background-color: transparent !important;
+            box-shadow: inset 0 0 0 rgba(0, 0, 0, 0) !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container">
+        <div class="section">
+            <h2>Upcoming Events</h2>
+            <div class="calendar" id="calendar">
+                <div id="calendar-controls" style="display: flex; justify-content: space-between; margin-bottom: 1em;">
+                    <button id="prev-month" style="background: none; border: 1px solid #ff6666; color: #ff6666; padding: 5px 10px;">← Prev</button>
+                    <h2 id="calendar-title" style="margin: 0 auto; color: #ff6666;">Loading...</h2>
+                    <button id="next-month" style="background: none; border: 1px solid #ff6666; color: #ff6666; padding: 5px 10px;">Next →</button>
+                </div>
+                <div class="calendar-header">
+                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                </div>
+                <div class="calendar-days" id="calendar-days">
+                    <!-- Days will be injected by JS -->
+                </div>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0sCHIbliKpkqt8LKOZTm10SmlIOyniQXvfNE7Pu-a2m25Rw/viewform?usp=sharing&ouid=100288347990656747695" target="_blank" style="
+                    display: inline-block;
+                    margin-top: 20px;
+                    padding: 10px 20px;
+                    background-color: #ff6666;
+                    color: white;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    transition: background-color 0.3s ease;
+                " onmouseover="this.style.backgroundColor='#ff4949'" onmouseout="this.style.backgroundColor='#ff6666'">
+                    + Add an event
+                </a>
+            </div>
+        </div>
+        <div id="event-details" class="event-details" style="margin-top: 20px;"></div>
+    </div>
+    
+    <div style="margin-top: 20px; text-align: center;">
+    
+</div>
+
+
+    
+    <div id="footer"></div> 
+
+<script>
+    async function loadFragment(id, file) { 
+      const res = await fetch(file);
+      const html = await res.text();
+      document.getElementById(id).innerHTML = html;
+    }
+
+    loadFragment("header", "/fragments/header-Kennesaw.html"); 
+    loadFragment("footer", "/fragments/footer.html");
+</script>
+    
+
+<script>
+    const eventsUrl = 'https://script.google.com/macros/s/AKfycbxIARqZ2UHbL0t3B7mlISm-g0NyH_QQu7pYIaGygczgiFgsmMig4x4yPiIPkRtUj4O4dQ/exec';
+    const daysContainer = document.getElementById('calendar-days');
+    const eventDetails = document.getElementById('event-details');
+
+    const day = new Date();
+    let currentYear = day.getFullYear();
+    let currentMonth = day.getMonth();
+    let allEvents = {};
+
+    function getDaysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+    }
+
+    function getFirstDay(year, month) {
+        return new Date(year, month, 1).getDay();
+    }
+
+    // Group events by date string "YYYY-MM-DD"
+    function groupEventsByDate(eventsArray) {
+        const grouped = {};
+        const startKey = "Start Time (ei. \"5:00 PM\")";
+        const endKey = "End Time  (ei. \"7:00 PM\")";
+        const orgKey = 'Org/club name (if hosted by an org/club, otherwise put "non-org")';
+        const locationKey = "location (Make sure to add what campus it's on if it's on campus) (if online, say so and add a link in the more info box)";
+        const linkKey = "Link to RSVP/more info";
+
+        for (const event of eventsArray) {
+            const dateKey = event["Date"]?.split('T')[0];
+            if (!dateKey) continue;
+
+            const normalizedEvent = {
+                title: event["Title of event"] || "Untitled Event",
+                org: event[orgKey] || "Unknown Org",
+                desc: event["Short Description"] || "",
+                time: (event[startKey] && event[endKey])
+                    ? `${event[startKey]} - ${event[endKey]}`
+                    : (event[startKey] || "Time not specified"),
+                location: event[locationKey] || "No location specified",
+                link: event[linkKey] || "#"
+            };
+
+            if (!grouped[dateKey]) grouped[dateKey] = [];
+            grouped[dateKey].push(normalizedEvent);
+        }
+        return grouped;
+    }
+
+
+    // JSONP loader
+    function loadEventsJSONP(url, callbackName = 'handleEvents') {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            window[callbackName] = function (data) {
+                try {
+                    resolve(data);
+                } catch (err) {
+                    reject(err);
+                } finally {
+                    delete window[callbackName];
+                    script.remove();
+                }
+            };
+
+            script.src = `${url}?callback=${callbackName}`;
+            script.onerror = () => reject(new Error('Failed to load JSONP script'));
+            document.body.appendChild(script);
+        });
+    }
+
+    async function loadAndRenderCalendar() {
+        try {
+            const events = await loadEventsJSONP(eventsUrl);
+            allEvents = groupEventsByDate(events);
+            renderCalendar(allEvents);
+        } catch (err) {
+            console.error('Error loading events:', err);
+            if (eventDetails)
+                eventDetails.innerHTML = `<p style="color:#f66;">Failed to load events.</p>`;
+        }
+    }
+
+    function renderCalendar(eventsByDate) {
+        daysContainer.innerHTML = '';
+        const calendarTitle = document.getElementById('calendar-title');
+        const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+        const firstDay = getFirstDay(currentYear, currentMonth);
+        const monthName = new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' });
+        calendarTitle.textContent = `${monthName} ${currentYear}`;
+
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'empty';
+            daysContainer.appendChild(empty);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const eventCount = eventsByDate[dateKey]?.length || 0;
+
+            const cell = document.createElement('div');
+            cell.textContent = day;
+            cell.className = eventCount > 0 ? 'event' : '';
+            cell.style.cursor = 'pointer';
+
+            if (eventCount > 0) {
+                const starDiv = document.createElement('div');
+                let stars = '★'.repeat(Math.min(3, eventCount));
+                if (eventCount > 3) stars += '+';
+                starDiv.textContent = stars;
+                starDiv.className = 'event-stars';
+                starDiv.title = `${eventCount} event${eventCount > 1 ? 's' : ''}`;
+                cell.appendChild(starDiv);
+            }
+
+            cell.addEventListener('click', () => {
+                showEvents(dateKey, eventsByDate[dateKey] || []);
+            });
+
+            daysContainer.appendChild(cell);
+        }
+    }
+
+    function showEvents(date, items = []) {
+        eventDetails.innerHTML = `
+            <h3 style="color:#ff6666;">Events on ${date}</h3>
+            ${
+                items.length > 0
+                ? items.map(item => `
+                    <div style="margin-bottom: 15px; padding: 10px; background-color: #1c1c1c; border-left: 3px solid #d90000; border-radius: 5px;">
+                        <strong style="color:#ff6666;">${item.title}</strong><br>
+                        <em>${item.desc}</em><br>
+                        🏳️‍🌈 Hosted by: ${item.org}<br>
+                        🕓 <strong>${item.time}</strong><br>
+                        📍 ${item.location}<br>
+                        🔗 <a href="${item.link}" target="_blank" rel="noopener">More Info / RSVP</a>
+                    </div>
+                `).join('')
+                : `<p>No events scheduled for this day.</p>`
+            }
+        `;
+    }
+
+    loadAndRenderCalendar();
+
+    document.getElementById('prev-month').addEventListener('click', () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderCalendar(allEvents);
+    });
+
+    document.getElementById('next-month').addEventListener('click', () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar(allEvents);
+    });
+</script>
+
+
+
+</body>

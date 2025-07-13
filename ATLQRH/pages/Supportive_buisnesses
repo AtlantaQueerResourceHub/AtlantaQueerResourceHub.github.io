@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queer Resource Hub</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div id="header"></div> 
+
+
+    <div class="container"> <!-- This div makes sure each segment is the same width, it is the background -->
+        <div class="section"> <!-- This div is each section of the page, try to keep each section's theme different  -->
+            <h2>Supportive businesses that cater to a queer audience</h2> <!-- This is the title of the section, keep it short and to the point  -->
+            <p>Learn where to find things you didn't know you could get in person, and learn where to shop that <i>actually</i> helps our community</p>
+        </div>
+        <div class="section">
+            <h2>Clothes</h2>
+            <ul> 
+                <li><a href="https://www.lnfy.org/thrift-store" target="_blank">
+                    Lost and Found Youth Thrift Store 
+                </a></li> 
+                <p> 
+                    proceeds go to Lost and found youth, an Atlanta organization helping with queer homelessness
+                </p>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Sexual wellness</h2>
+            <ul> <!-- ul stands for unordered list, or list of bullet points -->
+                <li><a href="https://linktr.ee/kissandrideatl" target="_blank">
+                    Kiss and Ride
+                </a></li>
+                <p>
+                    Queer Sexual Wellness store in Little five points
+                </p>
+            </ul>
+        </div>
+    </div>
+
+    
+    <div id="footer"></div> <!-- This div holds the footer, it's loaded in automatically -->
+
+
+    <script>
+        async function loadFragment(id, file) { /* This script loads in the header and footer to make the pages more uniform */
+        const res = await fetch(file);
+        const html = await res.text();
+        document.getElementById(id).innerHTML = html;
+        }
+
+        loadFragment("header", "/fragments/header.html"); /* in school hubs, make sure to replace this with the school's header */
+        loadFragment("footer", "/fragments/footer.html");
+    </script>
+</body>
+
