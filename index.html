@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queer Resource Hub</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="header"></div>
+
+<div class="container">
+    <div class="section">
+        <h2>School Hubs</h2>
+        <p>resources Scrappy can give you</p>
+        <ul>
+            <li><a href="Kennesaw/index.html" target="_blank">
+                Kennesaw State University
+            </a></li>
+        </ul>
+    </div>
+
+    <!-- Community and Social Groups Section -->
+    <div class="section">
+        <h2>Community & Social Groups</h2>
+        
+    </div>
+
+    <!-- Healthcare and Legislation -->
+    <div class="section">
+        <h2>Healthcare and Legal</h2>
+        <p>Where to start and how to access </p>
+        <ul>
+            <li><a href="" target="_blank">
+                STI testing (coming soon)
+            </a></li>
+            <p>
+                Link to an <b>internal page</b> with resources on how to access STI testing
+            </p>
+            <li><a href="pages/HRT_Resources.html" target="_blank">
+                How to access HRT
+            </a></li>
+            <p>
+                Link to an <b>internal page</b> with resources on how to access HRT
+            </p>
+            li><a href="pages/STI_testing.html" target="_blank">
+                How to access STI Testing
+            </a></li>
+            <p>
+                Link to an <b>internal page</b> with resources on how to access HRT
+            </p>
+            <li><a href="https://translegislation.com/" target="_blank">
+                Trans Legislation Tracker
+            </a></li>
+            <p>
+                A website that tracks anti-trans legislation in all 50 states and a federal level
+            </p>
+            <li><a href="https://georgiaequality.org/resources/" target="_blank">
+                Georgia Equality resource page
+            </a></li>
+            <p>
+                An organization for LGBT+ rights with lots of guides for legal issues such as name and gender marker changes
+            </p>
+            <li><a href="https://southernequality.org/resources/transinthesouth/" target="_blank">
+                Trans in the South Guide: A Directory of Trans-Affirming Health & Legal Service Providers
+            </a></li>
+            <p>
+                A guide on how to survive as a trans person in the southern United States
+            </p>
+        </ul>
+    </div>
+
+    <!-- Off campus resources -->
+    <div class="section">
+        <h2>Community resources</h2>
+        <p>Miscellaneous resources</p>
+        <ul>
+            <li><a href="pages/HowToGender.html" target="_blank">
+                How To Gender
+            </a></li>
+            <p>
+                A list of resources for trans people with the stuff you were never taught because of gender norms
+            </p>
+            <li><a href="https://transgenderteensurvivalguide.tumblr.com/" target="_blank">
+                Transgender Teen Survival Guide
+            </a></li>
+            <p>
+                A blog dedicated to answering the questions that people of all ages have concerning their gender identities.
+            </p>
+
+            <li><a href="https://docs.google.com/document/d/e/2PACX-1vTJjcl-3HSxBwrwUylbfl7uFFGaSbCgRPU_zbbRv4V_U2XZNZg1vE2Oqj7h5NSUEJaoYybVk7q_wEPq/pub?urp=gmail_link" target="_blank">
+                A Comprehensive Defense of Trans People
+            </a></li>
+            <p>
+                a Google Docs of studies about trans people and responces of popular transphobic arguments with propper evidence
+            </p>
+
+        </ul>
+    </div>
+
+
+    <div class="section">
+        <h2>Housing</h2>
+        <p>Housing is a human right.</p>
+        <ul>
+            <li><a href="https://www.lnfy.org/contact" target="_blank">
+                Lost n Found Youth
+            </a></li>
+            <p>
+                Lost-n-Found Youth is an Atlanta-based nonprofit organization that provides services to LGBTQ+ Youth experiencing homelessness.
+            </p>
+    </div>
+
+
+    <div class="section">
+        <h2>Political Activism and Queer History</h2>
+        <p>Fight for your Rights!</p>
+        <ul>
+            <li><a href="pages/WhatYouCanDo.html" target="_blank">
+                what you can do and Political Organizations
+            </a></li>
+            <p>
+                Link to an <b>internal page</b> with resources on how to help with the liberation cause
+            </p>
+
+            <li><a href="http://aeriecat.space/b/election_2025" target="_blank">
+                blog post that started this project
+            </a></li>
+            <p>
+                Explains the significance of the symbols used
+            </p>
+        </ul>
+    </div>
+
+</div>
+
+<div id="footer"></div> 
+
+<script>
+    async function loadFragment(id, file) { 
+      const res = await fetch(file);
+      const html = await res.text();
+      document.getElementById(id).innerHTML = html;
+    }
+
+    loadFragment("header", "/fragments/header.html"); 
+    loadFragment("footer", "/fragments/footer.html");
+</script>
+
+</body>
+</html>
